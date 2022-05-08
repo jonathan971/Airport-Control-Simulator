@@ -1,0 +1,14 @@
+//
+// Created by Jojo on 4/13/22.
+//
+
+#ifndef CONTROLEAERIEN_GROUPE_1_B_FLYING_TIME_H
+#define CONTROLEAERIEN_GROUPE_1_B_FLYING_TIME_H
+
+
+class Flying_time {
+
+};
+
+
+#endif //CONTROLEAERIEN_GROUPE_1_B_FLYING_TIME_H
