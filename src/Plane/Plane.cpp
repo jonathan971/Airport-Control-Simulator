@@ -98,6 +98,13 @@ std::vector<Airplane *> Plane::getListPlane() const {
     return m_airplane;
 }
 
+void Plane::supElement_ListPlane(int b){
+    m_airplane.erase(m_airplane.begin()+b);
+}
+
+void Plane::addElement_ListPlane(Airplane *b){
+    m_airplane.push_back(b);
+}
 
 
 

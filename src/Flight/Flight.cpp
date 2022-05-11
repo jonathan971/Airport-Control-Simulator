@@ -74,6 +74,70 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
     }
 }
 
+Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Flight *> &oldF)
+        : m_list_of_plane{list_of_plane}, id_plane{0} {
+//on recup direct les vecteur qu'on aura creer dans le main
+    std::srand(std::time(nullptr));
+    int choice(0), number(0), num(0);
+    bool ok(false);
+    int compteur;
+    std::string tiret = "-";
+    int letter1, letter2;
+
+    //Put an random id to the flight
+    do {
+        number = rand() % 9999 + 1000;
+        letter1 = rand() % 90 + 65;
+        letter2 = rand() % 90 + 65;
+    } while (!((number < 10000 && number > 999) && (letter1 < 89 && letter1 > 64) && (letter2 < 89 && letter2 > 64)));
+    flight_id += (char) letter1;
+    flight_id += (char) letter2;
+    flight_id += tiret;
+    flight_id += std::to_string(number);
+
+
+    //Pick a random plane
+
+    do {
+        id_plane = rand() % oldF.size();
+        for (size_t i(0); i < m_list_of_plane.size(); i++) {
+            if (oldF[id_plane]->get_airplane()->get_id() == m_list_of_plane[i]->get_id()) {
+                num = (int) i;
+                i = m_list_of_plane.size();
+            }
+        }
+        if (!m_list_of_plane[num]->get_state()) {
+            m_list_of_plane[num]->put_state(true);
+            ok = true;
+        } else {
+            ok = false;
+        }
+    } while (!ok);
+
+    //Put the older Arrival to the new departure
+
+    if (oldF[id_plane]->get_arrival()->condition_landing()) {//condition pour le départ d'un vol
+        departure = oldF[id_plane]->get_arrival()->get_AirportName();
+    }
+
+    //Random between Airport List for choose an Arrival
+    ok = false;
+
+    do {
+
+        choice = rand() % m_list_of_airport.size();
+        if (m_list_of_airport[choice]->get_AirportName() != departure &&
+            m_list_of_airport[choice]->condition_takeoff()) {//condition pour l'aterrissage d'un vol
+            arrival = m_list_of_airport[choice]->get_AirportName();
+            ok = true;
+        } else {
+            ok = false;
+            //copie du vecteur qui sera egale a ma liste d'aeroport²
+            //compteur++;
+        }
+    } while (!ok);
+}
+
 std::string Flight::get_flight_id() const {
     return flight_id;
 }
@@ -266,6 +330,7 @@ Flight::~Flight() {
 
 };
 
+
 Airplane *Flight::get_airplane() const {
     return m_list_of_plane[id_plane];
 }
@@ -295,7 +360,7 @@ std::vector<int> Flight::PCC() {
 
     // INITIALISATION
     int nbMarques = 0;
-     std::vector<int> couleurs(m_list_of_airport.size(), 0); // tous les aéroports sont non marqués
+    std::vector<int> couleurs(m_list_of_airport.size(), 0); // tous les aéroports sont non marqués
     std::vector<int> distances(m_list_of_airport.size(), std::numeric_limits<int>::max());
     distances[get_departure_num()] = 0; // departure est à une distance de 0 de lui même.
     std::vector<int> predecesseurs(m_list_of_airport.size(), -1); // nous ne connaissons pas encore les prédécesseurs
@@ -332,7 +397,7 @@ std::vector<int> Flight::PCC() {
                 couleurs[s] = 1;
                 nbMarques++;
                 choix = true;
-                chemin_suivi.push_back(s);// push back dans le vecteur du chemin
+                //chemin_suivi.push_back(s);// push back dans le vecteur du chemin
 
                 //arrive_a_destination = true;
 

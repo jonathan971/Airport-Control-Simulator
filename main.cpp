@@ -43,7 +43,7 @@ int main() {
 
                     while (window.pollEvent(event)) {
 
-                        a.Plane_Movement(window, Sprite, enter_manual, ALl_flight,  p,  a);
+                        a.Plane_Movement(window, Sprite, enter_manual, ALl_flight,  p,  a, font2);
                         //show_airport_on_screen(event, window, Sprite, a, font, font2, ALl_flight, enter_manual, p);
                         if (event.type == sf::Event::Closed ||
                             (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {

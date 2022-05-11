@@ -16,6 +16,10 @@ public:
     std::vector<Airplane*> getListPlane() const;
 
     void afficher() const;
+
+    void supElement_ListPlane(int b);
+
+    void addElement_ListPlane(Airplane *b);
 };
 
 

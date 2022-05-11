@@ -19,6 +19,8 @@ private:
 public:
     Flight(std::vector<Airplane *> list_of_plane,std::vector<Airport *> list_of_airport, bool &enter_manual);
 
+    Flight(std::vector<Airplane *> list_of_plane, std::vector<Flight *> &oldF);
+
     ~Flight();
 
     std::string get_flight_id() const;
