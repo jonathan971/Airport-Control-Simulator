@@ -74,13 +74,14 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
     }
 }
 
-Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Flight *> &oldF)
-        : m_list_of_plane{list_of_plane}, id_plane{0} {
+Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> list_of_airport, std::vector<Flight *> &oldF)
+        : m_list_of_plane{list_of_plane}, m_list_of_airport{list_of_airport}, id_plane{0} {
 //on recup direct les vecteur qu'on aura creer dans le main
     std::srand(std::time(nullptr));
     int choice(0), number(0), num(0);
     bool ok(false);
-    int compteur;
+    int compteur, random(0);
+
     std::string tiret = "-";
     int letter1, letter2;
 
@@ -99,9 +100,10 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Flight *> &old
     //Pick a random plane
 
     do {
-        id_plane = rand() % oldF.size();
+        random = rand() % oldF.size();
+        id_plane = oldF[random]->id_plane;
         for (size_t i(0); i < m_list_of_plane.size(); i++) {
-            if (oldF[id_plane]->get_airplane()->get_id() == m_list_of_plane[i]->get_id()) {
+            if (oldF[random]->get_airplane()->get_id() == m_list_of_plane[i]->get_id()) {
                 num = (int) i;
                 i = m_list_of_plane.size();
             }
@@ -116,10 +118,11 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Flight *> &old
 
     //Put the older Arrival to the new departure
 
-    if (oldF[id_plane]->get_arrival()->condition_landing()) {//condition pour le départ d'un vol
-        departure = oldF[id_plane]->get_arrival()->get_AirportName();
+    if (oldF[random]->get_arrival()->condition_landing()) {//condition pour le départ d'un vol
+        departure = oldF[random]->get_arrival()->get_AirportName();
     }
 
+    oldF.erase(oldF.begin()+ random);
     //Random between Airport List for choose an Arrival
     ok = false;
 

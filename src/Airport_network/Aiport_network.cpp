@@ -231,7 +231,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     progression.push_back(0.0f);
     do {
         for (size_t f(0); f < ALl_flight.size(); f++) {
-            progression[f] += clock.getElapsedTime().asSeconds() * (float)ALl_flight[f]->get_airplane()->get_speed();
+            progression[f] += clock.getElapsedTime().asSeconds() * (float) ALl_flight[f]->get_airplane()->get_speed();
             clock.restart();
             ALl_flight[f]->get_airplane()->set_plane_x(
                     Interpolate(my_Airport[f][0], my_Airport[f][1], progression[f]).x);
@@ -243,13 +243,13 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
             if ((ALl_flight[f]->get_airplane()->get_plane_x() ==
                  (float) my_Airport[f][1].x &&
                  ALl_flight[f]->get_airplane()->get_plane_y() ==
-                 (float) my_Airport[f][1].y)/* || progression[f] > 1*/) {
+                 (float) my_Airport[f][1].y)) {
 
-                    std::cout << "Avion" << f << ":" << my_Airport[f][1].x
-                              << ","
-                              << my_Airport[f][1].y << "/"
-                              << ALl_flight[f]->get_airplane()->get_plane_x() << ","
-                              << ALl_flight[f]->get_airplane()->get_plane_y() << std::endl;
+                std::cout << "Avion" << f << ":" << my_Airport[f][1].x
+                          << ","
+                          << my_Airport[f][1].y << "/"
+                          << ALl_flight[f]->get_airplane()->get_plane_x() << ","
+                          << ALl_flight[f]->get_airplane()->get_plane_y() << std::endl;
                 flight_plan[f][flight_plan[f].size() - 1]++;
                 if (flight_plan[f][flight_plan[f].size() - 1] < flight_plan[f].size() - 2) {
                     init_flight(ALl_flight, f,
@@ -260,7 +260,6 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 }
                 if (flight_plan[f][flight_plan[f].size() - 1] == flight_plan[f].size() - 2) {
                     std::cout << "Arivée\n";
-                    std::cout<<"<"<<f<<">"<<std::endl;
                     arrive = true;
                     ALl_flight[f]->get_airplane()->put_state(false);
                     oldF.push_back(ALl_flight[f]);
@@ -268,14 +267,11 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                     my_Airport.erase(my_Airport.begin() + (int) f);
                     flight_plan.erase(flight_plan.begin() + (int) f);
                     progression.erase(progression.begin() + (int) f);
-                    for(size_t b(0); b<p.getListPlane().size();b++) {
-                        if(ALl_flight[f]->get_airplane()->get_id()==p.getListPlane()[b]->get_id()) {
-                            std::cout << "<" << b << ">" << std::endl;
-                            std::cout << "<" << p.getListPlane()[b]->get_id() << ">" << std::endl;
+                    for (size_t b(0); b < p.getListPlane().size(); b++) {
+                        if (ALl_flight[f]->get_airplane()->get_id() == p.getListPlane()[b]->get_id()) {
                             p.supElement_ListPlane((int) b);
                         }
                     }
-                    std::cout<<"/"<<oldF.size()<<"/"<<std::endl;
                 }
             } else {
                 if (my_Airport[f][flight_plan.size() - 1].x >
@@ -299,10 +295,10 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 ok = true;
                 j = 0;
                 if (oldF.size() > 5) {
-                    for(auto & c : oldF){
+                    for (auto &c: oldF) {
                         p.addElement_ListPlane(c->get_airplane());
                     }
-                    auto *k = new Flight{p.getListPlane(), oldF};
+                    auto *k = new Flight{p.getListPlane(), a.getListAirport(), oldF};
                     ALl_flight.push_back(k);
                 } else if (ALl_flight.size() != p.getListPlane().size()) {
                     auto *l = new Flight{p.getListPlane(), a.getListAirport(), enter_manual};
