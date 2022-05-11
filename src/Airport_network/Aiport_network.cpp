@@ -175,16 +175,16 @@ void Aiport_network::init_flight(std::vector<Flight *> &ALl_flight, size_t i, sf
 void
 Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, bool &enter_manual,
                                std::vector<Flight *> &ALl_flight,
-                               Plane p, Aiport_network a, sf::Font font2) {
+                               Plane p, Aiport_network a, sf::Font &font2, sf::Font &font1) {
     window.setFramerateLimit(60);
 
     sf::Texture Airplane_info;
-    Airplane_info.loadFromFile("Graphic_Content/Map/Info/F.png");
+    Airplane_info.loadFromFile("../Graphic_Content/Map/Info/F.png");
     sf::Sprite Sprite_Airplane_info(Airplane_info);
     Sprite_Airplane_info.setPosition(29, 23);
-    sf::Text text1, text2, text3, text4, text5, text6, text7, text8;
-    init_text(font2, text1, text2, text3, text4, text5,
-              text6, text7, text8);
+    sf::Text text1, text2, text3, text4, text5, text6, text7, text8, text9, text10;
+    init_text(font1, font2, text1, text2, text3, text4, text5,
+              text6, text7, text8, text9, text10);
 
     bool arrive(false), end(false), ok(true), newFlight(false);
     sf::Vector2f (Airport1), (Airport2);
@@ -206,13 +206,18 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     my_Airport[0].push_back(Airport2);
 
     bool fin(false);
-    //float vitesse = 0.09f;
-    //float vitesse = 0.09f;
     std::vector<float> progression;
+    std::vector<int> compt;
     float time(0.0f), temp(0.0f);
     sf::Clock clock;
     sf::Clock clock2;
-
+    if(ALl_flight[0]->get_airplane()->get_model()=="ATR72-600") {
+        text10.setColor(sf::Color::White);
+    }else if(ALl_flight[0]->get_airplane()->get_model()=="BOEING-777"){
+        text10.setColor(sf::Color::Blue);
+    }else if(ALl_flight[0]->get_airplane()->get_model()=="AIRBUS-A380"){
+        text10.setColor(sf::Color::Yellow);
+    }
     //Left
     text1.setString(std::to_string(ALl_flight[0]->get_airplane()->get_id()));
     text2.setString(ALl_flight[0]->get_airplane()->get_model());
@@ -228,40 +233,49 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     text6.setString(ALl_flight[0]->get_flight_id());
     text7.setString(ALl_flight[0]->get_departure()->get_AirportName());
     text8.setString(ALl_flight[0]->get_arrival()->get_AirportName());
+    text9.setString(std::to_string(flight_plan[0].size() - 2));
 
     progression.push_back(0.0f);
+    compt.push_back(0);
     do {
         for (size_t f(0); f < ALl_flight.size(); f++) {
-            progression[f] += clock.getElapsedTime().asSeconds() * (float)ALl_flight[f]->get_airplane()->get_speed();
+            progression[f] += clock.getElapsedTime().asSeconds() * (float) ALl_flight[f]->get_airplane()->get_speed();
             clock.restart();
             ALl_flight[f]->get_airplane()->set_plane_x(
-                    Interpolate(my_Airport[f][0], my_Airport[f][1], progression[f]).x);
+                    Interpolate(my_Airport[f][my_Airport[f].size() - 2], my_Airport[f][my_Airport[f].size() - 1],
+                                progression[f]).x);
             ALl_flight[f]->get_airplane()->set_plane_y(
-                    Interpolate(my_Airport[f][0], my_Airport[f][1], progression[f]).y);
+                    Interpolate(my_Airport[f][my_Airport[f].size() - 2], my_Airport[f][my_Airport[f].size() - 1],
+                                progression[f]).y);
             ALl_flight[f]->get_airplane()->set_Coord_plane(ALl_flight[f]->get_airplane()->get_plane_x(),
                                                            ALl_flight[f]->get_airplane()->get_plane_y());
-
+            text10.setPosition(ALl_flight[f]->get_airplane()->get_plane_x()+15,
+                               ALl_flight[f]->get_airplane()->get_plane_y());
+            if(ALl_flight[f]->get_airplane()->get_model()=="ATR72-600") {
+                text10.setColor(sf::Color::White);
+            }else if(ALl_flight[f]->get_airplane()->get_model()=="BOEING-777"){
+                text10.setColor(sf::Color::Blue);
+            }else if(ALl_flight[f]->get_airplane()->get_model()=="AIRBUS-A380"){
+                text10.setColor(sf::Color::Yellow);
+            }
             if ((ALl_flight[f]->get_airplane()->get_plane_x() ==
-                 (float) my_Airport[f][1].x &&
+                 (float) my_Airport[f][my_Airport[f].size() - 1].x &&
                  ALl_flight[f]->get_airplane()->get_plane_y() ==
-                 (float) my_Airport[f][1].y)/* || progression[f] > 1*/) {
-
-                    std::cout << "Avion" << f << ":" << my_Airport[f][1].x
-                              << ","
-                              << my_Airport[f][1].y << "/"
-                              << ALl_flight[f]->get_airplane()->get_plane_x() << ","
-                              << ALl_flight[f]->get_airplane()->get_plane_y() << std::endl;
+                 (float) my_Airport[f][my_Airport[f].size() - 1].y)) {
+                compt[f]++;
                 flight_plan[f][flight_plan[f].size() - 1]++;
-                if (flight_plan[f][flight_plan[f].size() - 1] < flight_plan[f].size() - 2) {
+                if (flight_plan[f][flight_plan[f].size() - 1] < flight_plan[f].size() - 2 &&
+                    compt[f] != flight_plan[f].size() - 2) {
                     init_flight(ALl_flight, f,
-                                Airport1, Airport2, flight_plan, flight_plan[f][flight_plan.size() - 1], ok);
-
-                    //flight_plan[f][flight_plan.size() - 1]++;
+                                Airport1, Airport2, flight_plan, flight_plan[f][flight_plan[f].size() - 1], ok);
+                    //my_Airport[f].push_back(Airport1);
+                    my_Airport[f].push_back(Airport2);
+                    progression[f] = 0;
 
                 }
-                if (flight_plan[f][flight_plan[f].size() - 1] == flight_plan[f].size() - 2) {
+                if (flight_plan[f][flight_plan[f].size() - 1] == flight_plan[f][flight_plan[f].size() - 2] &&
+                    compt[f] == flight_plan[f].size() - 2) {
                     std::cout << "Arivée\n";
-                    std::cout<<"<"<<f<<">"<<std::endl;
                     arrive = true;
                     ALl_flight[f]->get_airplane()->put_state(false);
                     oldF.push_back(ALl_flight[f]);
@@ -269,25 +283,28 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                     my_Airport.erase(my_Airport.begin() + (int) f);
                     flight_plan.erase(flight_plan.begin() + (int) f);
                     progression.erase(progression.begin() + (int) f);
-                    for(size_t b(0); b<p.getListPlane().size();b++) {
-                        if(ALl_flight[f]->get_airplane()->get_id()==p.getListPlane()[b]->get_id()) {
-                            std::cout << "<" << b << ">" << std::endl;
-                            std::cout << "<" << p.getListPlane()[b]->get_id() << ">" << std::endl;
+                    compt.erase(compt.begin() + (int) f);
+
+                    for (size_t b(0); b < p.getListPlane().size(); b++) {
+                        if (ALl_flight[f]->get_airplane()->get_id() == p.getListPlane()[b]->get_id()) {
                             p.supElement_ListPlane((int) b);
                         }
                     }
-                    std::cout<<"/"<<oldF.size()<<"/"<<std::endl;
                 }
             } else {
-                if (my_Airport[f][flight_plan.size() - 1].x >
-                    my_Airport[f][flight_plan.size()].x) {
+                if (my_Airport[f][flight_plan[f].size() - 1].x >
+                    my_Airport[f][flight_plan[f].size()].x) {
                     ALl_flight[f]->get_airplane()->set_Angle(
-                            (float) angle(my_Airport[f][0].x, my_Airport[f][0].y, my_Airport[f][1].x,
-                                          my_Airport[f][1].y) + 180.0f);
+                            (float) angle(my_Airport[f][my_Airport[f].size() - 2].x,
+                                          my_Airport[f][my_Airport[f].size() - 2].y,
+                                          my_Airport[f][my_Airport[f].size() - 1].x,
+                                          my_Airport[f][my_Airport[f].size() - 1].y) + 180.0f);
                 } else {
                     ALl_flight[f]->get_airplane()->set_Angle(
-                            (float) angle(my_Airport[f][0].x, my_Airport[f][0].y, my_Airport[f][1].x,
-                                          my_Airport[f][1].y) + 180.0f);
+                            (float) angle(my_Airport[f][my_Airport[f].size() - 2].x,
+                                          my_Airport[f][my_Airport[f].size() - 2].y,
+                                          my_Airport[f][my_Airport[f].size() - 1].x,
+                                          my_Airport[f][my_Airport[f].size() - 1].y) + 180.0f);
                 }
                 window.clear();
                 window.draw(Sprite);
@@ -295,15 +312,15 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 arrive = false;
             }
             time = clock2.getElapsedTime().asSeconds();
-            if (time >= 4) {
+            if (time >= MAX_WAITING_TIME_TO_CREATE) {
                 //newFlight=true;
                 ok = true;
                 j = 0;
-                if (oldF.size() > 5) {
-                    for(auto & c : oldF){
+                if (oldF.size() > MAX_OLD_F) {
+                    for (auto &c: oldF) {
                         p.addElement_ListPlane(c->get_airplane());
                     }
-                    auto *k = new Flight{p.getListPlane(), oldF};
+                    auto *k = new Flight{p.getListPlane(), a.getListAirport(), oldF};
                     ALl_flight.push_back(k);
                 } else if (ALl_flight.size() != p.getListPlane().size()) {
                     auto *l = new Flight{p.getListPlane(), a.getListAirport(), enter_manual};
@@ -316,23 +333,24 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 my_Airport[ALl_flight.size() - 1].push_back(Airport1);
                 my_Airport[ALl_flight.size() - 1].push_back(Airport2);
                 progression.push_back(0.0f);
+                compt.push_back(0);
                 clock2.restart();
                 //Left
-                text1.setString(std::to_string(ALl_flight[f]->get_airplane()->get_id()));
-                text2.setString(ALl_flight[f]->get_airplane()->get_model());
-                text3.setString(ALl_flight[f]->get_airplane()->get_type());
-                if (ALl_flight[f]->get_airplane()->get_state()) {
+                text1.setString(std::to_string(ALl_flight[f+1]->get_airplane()->get_id()));
+                text2.setString(ALl_flight[f+1]->get_airplane()->get_model());
+                text3.setString(ALl_flight[f+1]->get_airplane()->get_type());
+                if (ALl_flight[f+1]->get_airplane()->get_state()) {
                     text4.setString("ACTIF");
                 } else {
                     text4.setString("NON ACTIF");
                 }
-                text5.setString(std::to_string((int) ALl_flight[f]->get_airplane()->get_fuel_capacity()));
+                text5.setString(std::to_string((int) ALl_flight[f+1]->get_airplane()->get_fuel_capacity()));
 
                 //Right
-                text6.setString(ALl_flight[f]->get_flight_id());
-                text7.setString(ALl_flight[f]->get_departure()->get_AirportName());
-                text8.setString(ALl_flight[f]->get_arrival()->get_AirportName());
-
+                text6.setString(ALl_flight[f+1]->get_flight_id());
+                text7.setString(ALl_flight[f+1]->get_departure()->get_AirportName());
+                text8.setString(ALl_flight[f+1]->get_arrival()->get_AirportName());
+                text9.setString(std::to_string(flight_plan[f+1].size() - 2));
             }
             time = clock2.getElapsedTime().asSeconds();
             if (time < 2.5) {
@@ -343,8 +361,9 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                     window.draw(z->get_airplane()->get_Sprite());
                 }
                 draw_text(window, text1, text2, text3, text4, text5,
-                          text6, text7, text8);
-
+                          text6, text7, text8, text9);
+                text10.setString(ALl_flight[f]->get_flight_id());
+                window.draw(text10);
                 window.display();
             } else {
                 window.clear();
@@ -352,6 +371,8 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 for (auto &z: ALl_flight) {
                     window.draw(z->get_airplane()->get_Sprite());
                 }
+                text10.setString(ALl_flight[f]->get_flight_id());
+                window.draw(text10);
                 window.display();
             }
             //newFlight=false;
@@ -388,8 +409,8 @@ double angle(float airport1X, float airport1Y, float airport2X, float airport2Y)
     }
 }
 
-void init_text(sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
-               sf::Text &text6, sf::Text &text7, sf::Text &text8) {
+void init_text(sf::Font &font1, sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
+               sf::Text &text6, sf::Text &text7, sf::Text &text8, sf::Text &text9, sf::Text &text10) {
     //Info plane (Coté gauche)
 
     //ID Plane
@@ -441,14 +462,24 @@ void init_text(sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text
     text8.setFont(font2);
     text8.setCharacterSize(SIZE);
     text8.setColor(sf::Color::White);
-    text8.setPosition(RIGHT_X, 110);
+    text8.setPosition(RIGHT_X, 98);
+
+    //Escale
+    text9.setFont(font2);
+    text9.setCharacterSize(SIZE);
+    text9.setColor(sf::Color::Yellow);
+    text9.setPosition(RIGHT_X + 20, 134);
+
+    //Escale
+    text10.setFont(font1);
+    text10.setCharacterSize(7);
 
 
 }
 
 void
 draw_text(sf::RenderWindow &window, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
-          sf::Text &text6, sf::Text &text7, sf::Text &text8) {
+          sf::Text &text6, sf::Text &text7, sf::Text &text8, sf::Text &text9) {
     window.draw(text1);
     window.draw(text2);
     window.draw(text3);
@@ -457,6 +488,7 @@ draw_text(sf::RenderWindow &window, sf::Text &text1, sf::Text &text2, sf::Text &
     window.draw(text6);
     window.draw(text7);
     window.draw(text8);
+    window.draw(text9);
 }
 
 //VERIFICATION DE LA VIABILITE DE L'AEROPORT QUI SE TROUVE A UNE DISTANCE MINIMALE

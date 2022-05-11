@@ -4,7 +4,9 @@
 #include <fstream>
 #include <queue>
 #include <sstream>
+#define MAX_PLANE 10
 class Airplane;
+
 class Plane {
 private:
     std::vector<Airplane*> m_airplane;

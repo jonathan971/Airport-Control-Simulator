@@ -11,6 +11,9 @@
 #define LEFT_X 200
 #define RIGHT_X 1080
 #define SIZE 26
+#define MAX_OLD_F 5
+#define MAX_WAITING_TIME_TO_CREATE 20
+
 class Connexion;
 
 class Airport;
@@ -45,7 +48,7 @@ public:
                      bool &ok);
 
     void Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, bool &enter_manual, std::vector<Flight *> &ALl_flight,
-                   Plane p, Aiport_network a, sf::Font font2);
+                   Plane p, Aiport_network a, sf::Font &font2, sf::Font &font1);
 
 };
 
@@ -53,9 +56,9 @@ sf::Vector2f (Interpolate(const sf::Vector2f (&pointA), const sf::Vector2f (&poi
 
 double angle(float airport1X, float airport1Y, float airport2X, float airport2Y);
 
-void init_text(sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
-               sf::Text &text6, sf::Text &text7, sf::Text &text8 );
+void init_text(sf::Font &font1, sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
+               sf::Text &text6, sf::Text &text7, sf::Text &text8, sf::Text &text9, sf::Text &text10 );
 
 void draw_text(sf::RenderWindow &window, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
-          sf::Text &text6, sf::Text &text7, sf::Text &text8);
+          sf::Text &text6, sf::Text &text7, sf::Text &text8, sf::Text &text9);
 #endif //CONTROLEAERIEN_GROUPE_1_B_AIPORT_NETWORK_H
