@@ -6,30 +6,43 @@
 #define CONTROLEAERIEN_GROUPE_1_B_CASE_H
 
 #include <iostream>
-#include "../Menu/Menu.h"
+//#include <SFML/Graphics.hpp>
+#include <vector>
+
 
 
 class Case {
 private :
-    float m_x, m_y ;
     int m_state,  m_id;
+    float m_x, m_y;
     std::vector<std::pair<Case *const, float>> m_successeurs;
 
-    //std::pair<int, int> m_pos;
+    //std::pair<float, float> m_pos;//x,y
 
 public :
     Case();
+
     void set_X(float x);
+
     void set_Y(float y);
+
     void set_state(int state);
+
     void set_id(int id);
-    int get_state();
-    float get_X();
-    float get_Y();
-    int get_id();
+
+    int get_state() const;
+
+    float get_X() const;
+
+    float get_Y() const;
+
+    int get_id() const;
+
     void addSuccesseur(Case *successeur, float poids);
+
     const std::vector<std::pair<Case *const, float>> &getSuccesseurs() const;
 
+    void afficher() const;
 
 };
 

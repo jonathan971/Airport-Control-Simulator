@@ -6,25 +6,26 @@
 #define CONTROLEAERIEN_GROUPE_1_B_MAP_H
 
 #include "../Case/Case.h"
-#include "../Menu/Menu.h"
+//#include "../Airport_network/Aiport_network.h"
 #include "../Plane/Plane.h"
+
+#define COLUMNS 87
+#define ROWS 47
 class Airplane;
 class Case;
+//class Aiport_network;
 
-class map {
+class Map {
 private :
-    float m_x, m_y;
-    /*enum m_State{
-        Map_case_open = 0,
-        Map_case_close = 1,
-        Map_turbulence = 2,
-    };*/
-    Case** my_map;
+
+    Case **my_map;
 
 public:
-    map(Case** board);
+    Map();
     void modelize_map();
     std::vector<Case*> Astar_turbulence (Airplane* plane, Case* arrival);
+
+
 };
 
 float calcul_distance(float x, float y,float x2, float y2);

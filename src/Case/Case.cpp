@@ -4,57 +4,49 @@
 
 #include "Case.h"
 
-Case::Case() : m_state{0} {
-
-}
-
-void Case::set_X(float x) {
-    m_x = x;
-}
-
-void Case::set_Y(float y) {
-    m_y = y;
-}
-
-void Case::set_state(int state) {
-
-    switch (state) {
-        case 1 :
-            m_state = 1;//free
-            // state = 0;
-            break;
-        case 2:
-            m_state=2;//aiport
-            break;
-        case 3:
-            m_state=3;//obstacle
-            // state = 0;
-            break;
-        default:
-            break;
-    }
-
-}
-
-int Case::get_state() {
-    return m_state;
+Case::Case()  {
+    //m_y = 0.0f;
+   // m_pos.first = 0.0f;
+    //m_pos.second = 0.0f;
 }
 
 void Case::set_id(int id) {
-
     m_id = id;
+}
+
+void Case::set_X(float x) {
+    //m_pos.first = x;
+    m_x = x;
+}
+
+/*void Case::set_Y(float y) {
+    //m_pos.second = y;
+    m_y = y;
+}*/
+
+void Case::set_state(int state) {
+
+    m_state = state;
+    //description state ; 1->...., 2->Airport, 3->turbulence,
 
 }
 
-float Case::get_X() {
+int Case::get_state() const {
+    return m_state;
+}
+
+float Case::get_X() const {
+    //return m_pos.first;
     return m_x;
 }
 
-float Case::get_Y() {
-    return m_y;
+float Case::get_Y() const {
+
+   // return m_pos.second;
+   return m_y;
 }
 
-int Case::get_id() {
+int Case::get_id() const {
     return m_id;
 }
 
@@ -64,6 +56,14 @@ const std::vector<std::pair<Case *const, float>> &Case::getSuccesseurs() const {
 
 void Case::addSuccesseur(Case *successeur, float poids) {
         m_successeurs.emplace_back(successeur,poids);
+}
+
+void Case::afficher() const {
+    std::cout << "   Case " << m_id <<"  "<< m_state << " : " << std::endl;
+    for (auto addrSommet : m_successeurs) {
+        std::cout << "      " << m_id << "---" << "(" << addrSommet.second << ")" << "--->" << addrSommet.first->get_id()
+                  << std::endl;
+    }
 }
 
 

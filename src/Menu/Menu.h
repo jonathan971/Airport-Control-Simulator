@@ -6,9 +6,9 @@
 #include "../Airport_network/Aiport_network.h"
 #include "../Flight/Flight.h"
 #include "../Airport/Airport.h"
+#include "../Map/Map.h"
 
-#define COLUMNS 87
-#define ROWS 47
+
 
 #define LARGEUR_FENETRE 1300
 #define HAUTEUR_FENETRE 700

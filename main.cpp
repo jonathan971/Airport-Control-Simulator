@@ -1,4 +1,5 @@
 #include "src/Menu/Menu.h"
+
 #include <thread>
 int main() {
 
@@ -7,12 +8,12 @@ int main() {
     float time(0.0f);
     sf::Font font;
     sf::Font font2;
-    font.loadFromFile("../Font/Pixeled.ttf");
-    font2.loadFromFile("../Font/calendar note tfb.ttf");
+    font.loadFromFile("Font/Pixeled.ttf");
+    font2.loadFromFile("Font/calendar note tfb.ttf");
     //Initialisation Cartes Map
     sf::Texture Menu_principal;
 
-    Menu_principal.loadFromFile("../Graphic_Content/Map/Sim_Map.png");
+    Menu_principal.loadFromFile("Graphic_Content/Map/Sim_Map.png");
 
     sf::Sprite Sprite(Menu_principal);
 
@@ -21,6 +22,12 @@ int main() {
 
     Plane p{"../Text_files/Airplane"};
     Aiport_network a{"../Text_files/Airport_network"};
+
+    Map m;
+
+
+
+
 
     do {
         Game_Menu(choix);
@@ -31,8 +38,13 @@ int main() {
 
         switch (choix) {
             case 1 :
+                m.modelize_map();
 
-                Sprite.setScale(
+
+
+
+
+              /*  Sprite.setScale(
                         targetSize.x / Sprite.getLocalBounds().width,
                         targetSize.y / Sprite.getLocalBounds().height);
 
@@ -52,7 +64,7 @@ int main() {
                             choix = 0;
                         }
                     }
-                }
+                }*/
                 fin = false;
 
                 break;

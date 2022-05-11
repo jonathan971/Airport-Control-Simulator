@@ -179,7 +179,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     window.setFramerateLimit(60);
 
     sf::Texture Airplane_info;
-    Airplane_info.loadFromFile("../Graphic_Content/Map/Info/F.png");
+    Airplane_info.loadFromFile("Graphic_Content/Map/Info/F.png");
     sf::Sprite Sprite_Airplane_info(Airplane_info);
     Sprite_Airplane_info.setPosition(29, 23);
     sf::Text text1, text2, text3, text4, text5, text6, text7, text8;
@@ -206,7 +206,8 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     my_Airport[0].push_back(Airport2);
 
     bool fin(false);
-    float vitesse = 0.09f;
+    //float vitesse = 0.09f;
+    //float vitesse = 0.09f;
     std::vector<float> progression;
     float time(0.0f), temp(0.0f);
     sf::Clock clock;
