@@ -11,7 +11,7 @@ Plane::Plane(std::string FichierPlane) {
     std::string ligne;
     while (std::getline(ifs, ligne)) {
        // std::srand(std::time(nullptr));
-        int number = rand() % 10 + 1;
+        int number = rand() % MAX_PLANE + 1;
         std::stringstream ss;
         size_t posit = ligne.find(" ");
         std::string nmodel = ligne.substr(0, posit);

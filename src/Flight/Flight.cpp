@@ -400,7 +400,7 @@ std::vector<int> Flight::PCC() {
                 couleurs[s] = 1;
                 nbMarques++;
                 choix = true;
-                //chemin_suivi.push_back(s);// push back dans le vecteur du chemin
+                chemin_suivi.push_back(s);// push back dans le vecteur du chemin
 
                 //arrive_a_destination = true;
 
@@ -424,6 +424,6 @@ std::vector<int> Flight::PCC() {
     } while (nbMarques < m_list_of_airport.size());
 
     //RECUPERATION DU CHEMIN JUSQU'A L'AEROPORT D'ARRIVE
-
+    chemin_suivi.erase(chemin_suivi.begin());
     return chemin_suivi;
 }
