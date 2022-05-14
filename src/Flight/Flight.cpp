@@ -1,26 +1,47 @@
 #include "Flight.h"
 
-Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> list_of_airport, bool &enter_manual)
+Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> list_of_airport, bool &enter_manual, std::vector<Flight *> &ALl_Flight)
         : m_list_of_plane{list_of_plane}, m_list_of_airport{list_of_airport}, id_plane{0} {
 //on recup direct les vecteur qu'on aura creer dans le main
     std::srand(std::time(nullptr));
     int choice(0), number(0);
-    bool ok(false);
+    bool ok(false), find(false);
     int compteur;
     std::string tiret = "-";
     int letter1, letter2;
 
     //Put an random id to the flight
-    do {
-        number = rand() % 9999 + 1000;
-        letter1 = rand() % 90 + 65;
-        letter2 = rand() % 90 + 65;
-    } while (!((number < 10000 && number > 999) && (letter1 < 89 && letter1 > 64) && (letter2 < 89 && letter2 > 64)));
-    flight_id += (char) letter1;
-    flight_id += (char) letter2;
-    flight_id += tiret;
-    flight_id += std::to_string(number);
-
+    if(ALl_Flight.empty()){
+            do {
+                number = rand() % 9999 + 1000;
+                letter1 = rand() % 90 + 65;
+                letter2 = rand() % 90 + 65;
+            } while (!((number < 10000 && number > 999) && (letter1 < 89 && letter1 > 64) &&
+                       (letter2 < 89 && letter2 > 64)));
+            flight_id += (char) letter1;
+            flight_id += (char) letter2;
+            flight_id += tiret;
+            flight_id += std::to_string(number);
+    }else {
+        do {
+            find = false;
+            do {
+                number = rand() % 9999 + 1000;
+                letter1 = rand() % 90 + 65;
+                letter2 = rand() % 90 + 65;
+            } while (!((number < 10000 && number > 999) && (letter1 < 89 && letter1 > 64) &&
+                       (letter2 < 89 && letter2 > 64)));
+            flight_id += (char) letter1;
+            flight_id += (char) letter2;
+            flight_id += tiret;
+            flight_id += std::to_string(number);
+            for (auto &f: ALl_Flight) {
+                if (flight_id == f->flight_id) {
+                    find = true;
+                }
+            }
+        } while (find);
+    }
 
     //Pick a random plane
 
@@ -79,7 +100,7 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
 //on recup direct les vecteur qu'on aura creer dans le main
     std::srand(std::time(nullptr));
     int choice(0), number(0), num(0);
-    bool ok(false);
+    bool ok(false), find(false);
     int compteur, random(0);
 
     std::string tiret = "-";
@@ -87,15 +108,22 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
 
     //Put an random id to the flight
     do {
-        number = rand() % 9999 + 1000;
-        letter1 = rand() % 90 + 65;
-        letter2 = rand() % 90 + 65;
-    } while (!((number < 10000 && number > 999) && (letter1 < 89 && letter1 > 64) && (letter2 < 89 && letter2 > 64)));
-    flight_id += (char) letter1;
-    flight_id += (char) letter2;
-    flight_id += tiret;
-    flight_id += std::to_string(number);
-
+        do {
+            number = rand() % 9999 + 1000;
+            letter1 = rand() % 90 + 65;
+            letter2 = rand() % 90 + 65;
+        } while (!((number < 10000 && number > 999) && (letter1 < 89 && letter1 > 64) &&
+                   (letter2 < 89 && letter2 > 64)));
+        flight_id += (char) letter1;
+        flight_id += (char) letter2;
+        flight_id += tiret;
+        flight_id += std::to_string(number);
+        for(auto & f : oldF) {
+            if (flight_id == f->flight_id){
+                find=true;
+            }
+        }
+    } while (find);
 
     //Pick a random plane
 

@@ -177,6 +177,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                                std::vector<Flight *> &ALl_flight,
                                Plane p, Aiport_network a, sf::Font &font2, sf::Font &font1) {
     window.setFramerateLimit(60);
+    std::srand(std::time(nullptr));
 
     sf::Texture Airplane_info;
     Airplane_info.loadFromFile("../Graphic_Content/Map/Info/F.png");
@@ -185,17 +186,29 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     sf::Text text1, text2, text3, text4, text5, text6, text7, text8, text9, text10;
     init_text(font1, font2, text1, text2, text3, text4, text5,
               text6, text7, text8, text9, text10);
-
-    bool arrive(false), end(false), ok(true), newFlight(false);
+    std::vector<sf::Text> Text;
+    bool arrive(false), end(false), ok(true), newFlight(false), fin(false);
     sf::Vector2f (Airport1), (Airport2);
     std::vector<std::vector<sf::Vector2f>> (my_Airport);
     std::vector<std::vector<int>> flight_plan;
-    int j(0);
+    int j(0), num(0), number(0), number_of_pertubation(0);
+    int frameIndex = 0;
+    std::vector<int> num_connect;
     std::vector<Flight *> oldF;
+    std::vector<std::vector<sf::Sprite>> vec_Sprites;
     sf::Event event{};
 
+
+    sf::Texture animTexture;
+    animTexture.loadFromFile("../Graphic_Content/turbulence/Rain_animation.png");
+    std::vector<sf::Sprite> animSprites;
+
+    alea_intemp(window, m_connect[num]->getPremier()->getXcentre(), m_connect[num]->getPremier()->getYcentre(),
+                m_connect[num]->getDeuxieme()->getXcentre(), m_connect[num]->getDeuxieme()->getYcentre(), number,
+                animSprites, animTexture);
+
     //Get Flight plan vector
-    Flight m{p.getListPlane(), a.getListAirport(), enter_manual};
+    Flight m{p.getListPlane(), a.getListAirport(), enter_manual, ALl_flight};
     ALl_flight.push_back(&m);
     init_flight(ALl_flight, 0,
                 Airport1, Airport2, flight_plan, j, ok);
@@ -205,17 +218,17 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     my_Airport[0].push_back(Airport1);
     my_Airport[0].push_back(Airport2);
 
-    bool fin(false);
     std::vector<float> progression;
     std::vector<int> compt;
-    float time(0.0f), temp(0.0f);
-    sf::Clock clock;
-    sf::Clock clock2;
-    if(ALl_flight[0]->get_airplane()->get_model()=="ATR72-600") {
+    float time(0.0f), temp(0.0f), boucle(0.0f);
+
+    sf::Clock clock, clock2, clock3, clock4;
+
+    if (ALl_flight[0]->get_airplane()->get_model() == "ATR72-600") {
         text10.setColor(sf::Color::White);
-    }else if(ALl_flight[0]->get_airplane()->get_model()=="BOEING-777"){
+    } else if (ALl_flight[0]->get_airplane()->get_model() == "BOEING-777") {
         text10.setColor(sf::Color::Blue);
-    }else if(ALl_flight[0]->get_airplane()->get_model()=="AIRBUS-A380"){
+    } else if (ALl_flight[0]->get_airplane()->get_model() == "AIRBUS-A380") {
         text10.setColor(sf::Color::Yellow);
     }
     //Left
@@ -234,6 +247,8 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     text7.setString(ALl_flight[0]->get_departure()->get_AirportName());
     text8.setString(ALl_flight[0]->get_arrival()->get_AirportName());
     text9.setString(std::to_string(flight_plan[0].size() - 2));
+    text10.setString(ALl_flight[0]->get_flight_id());
+    Text.push_back(text10);
 
     progression.push_back(0.0f);
     compt.push_back(0);
@@ -249,15 +264,27 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                                 progression[f]).y);
             ALl_flight[f]->get_airplane()->set_Coord_plane(ALl_flight[f]->get_airplane()->get_plane_x(),
                                                            ALl_flight[f]->get_airplane()->get_plane_y());
-            text10.setPosition(ALl_flight[f]->get_airplane()->get_plane_x()+15,
+            text10.setPosition(ALl_flight[f]->get_airplane()->get_plane_x() + 15,
                                ALl_flight[f]->get_airplane()->get_plane_y());
-            if(ALl_flight[f]->get_airplane()->get_model()=="ATR72-600") {
+            Text[f].setPosition(text10.getPosition());
+
+            if (ALl_flight[f]->get_airplane()->get_model() == "ATR72-600") {
                 text10.setColor(sf::Color::White);
-            }else if(ALl_flight[f]->get_airplane()->get_model()=="BOEING-777"){
-                text10.setColor(sf::Color::Blue);
-            }else if(ALl_flight[f]->get_airplane()->get_model()=="AIRBUS-A380"){
+            } else if (ALl_flight[f]->get_airplane()->get_model() == "BOEING-777") {
+                text10.setColor(sf::Color(0, 60, 255));
+            } else if (ALl_flight[f]->get_airplane()->get_model() == "AIRBUS-A380") {
                 text10.setColor(sf::Color::Yellow);
             }
+            Text[f].setColor(text10.getColor());
+
+            boucle = clock4.getElapsedTime().asSeconds();
+            if(boucle>TIME_MAX_TO_CREATE_PERTUBATION) {
+                manage_pertubation(window, num, number, number_of_pertubation,
+                                   num_connect, animSprites,
+                                   animTexture, vec_Sprites);
+                clock4.restart();
+            }
+
             if ((ALl_flight[f]->get_airplane()->get_plane_x() ==
                  (float) my_Airport[f][my_Airport[f].size() - 1].x &&
                  ALl_flight[f]->get_airplane()->get_plane_y() ==
@@ -284,6 +311,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                     flight_plan.erase(flight_plan.begin() + (int) f);
                     progression.erase(progression.begin() + (int) f);
                     compt.erase(compt.begin() + (int) f);
+                    Text.erase(Text.begin() + (int) f);
 
                     for (size_t b(0); b < p.getListPlane().size(); b++) {
                         if (ALl_flight[f]->get_airplane()->get_id() == p.getListPlane()[b]->get_id()) {
@@ -323,7 +351,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                     auto *k = new Flight{p.getListPlane(), a.getListAirport(), oldF};
                     ALl_flight.push_back(k);
                 } else if (ALl_flight.size() != p.getListPlane().size()) {
-                    auto *l = new Flight{p.getListPlane(), a.getListAirport(), enter_manual};
+                    auto *l = new Flight{p.getListPlane(), a.getListAirport(), enter_manual, ALl_flight};
                     ALl_flight.push_back(l);
                 }
                 init_flight(ALl_flight, ALl_flight.size() - 1,
@@ -336,24 +364,32 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 compt.push_back(0);
                 clock2.restart();
                 //Left
-                text1.setString(std::to_string(ALl_flight[f+1]->get_airplane()->get_id()));
-                text2.setString(ALl_flight[f+1]->get_airplane()->get_model());
-                text3.setString(ALl_flight[f+1]->get_airplane()->get_type());
-                if (ALl_flight[f+1]->get_airplane()->get_state()) {
+                text1.setString(std::to_string(ALl_flight[f + 1]->get_airplane()->get_id()));
+                text2.setString(ALl_flight[f + 1]->get_airplane()->get_model());
+                text3.setString(ALl_flight[f + 1]->get_airplane()->get_type());
+                if (ALl_flight[f + 1]->get_airplane()->get_state()) {
                     text4.setString("ACTIF");
                 } else {
                     text4.setString("NON ACTIF");
                 }
-                text5.setString(std::to_string((int) ALl_flight[f+1]->get_airplane()->get_fuel_capacity()));
+                text5.setString(std::to_string((int) ALl_flight[f + 1]->get_airplane()->get_fuel_capacity()));
 
                 //Right
-                text6.setString(ALl_flight[f+1]->get_flight_id());
-                text7.setString(ALl_flight[f+1]->get_departure()->get_AirportName());
-                text8.setString(ALl_flight[f+1]->get_arrival()->get_AirportName());
-                text9.setString(std::to_string(flight_plan[f+1].size() - 2));
+                text6.setString(ALl_flight[f + 1]->get_flight_id());
+                text7.setString(ALl_flight[f + 1]->get_departure()->get_AirportName());
+                text8.setString(ALl_flight[f + 1]->get_arrival()->get_AirportName());
+                text9.setString(std::to_string(flight_plan[f + 1].size() - 2));
+                text10.setString(ALl_flight[f + 1]->get_flight_id());
+                Text.push_back(text10);
             }
             time = clock2.getElapsedTime().asSeconds();
-            if (time < 2.5) {
+            float frameDuration = 0.6f; // Each frame takes aruond 1/10 sec.
+            if (clock3.getElapsedTime().asSeconds() >= frameDuration) {
+                frameIndex++;
+                frameIndex = frameIndex % (int) (animSprites.size());
+                clock3.restart();
+            }
+            if (time < 5) {
                 window.clear();
                 window.draw(Sprite);
                 window.draw(Sprite_Airplane_info);
@@ -362,8 +398,12 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 }
                 draw_text(window, text1, text2, text3, text4, text5,
                           text6, text7, text8, text9);
-                text10.setString(ALl_flight[f]->get_flight_id());
-                window.draw(text10);
+                for (const auto & l : Text) {
+                    window.draw(l);
+                }
+
+
+                window.draw(animSprites[frameIndex]);
                 window.display();
             } else {
                 window.clear();
@@ -371,8 +411,10 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 for (auto &z: ALl_flight) {
                     window.draw(z->get_airplane()->get_Sprite());
                 }
-                text10.setString(ALl_flight[f]->get_flight_id());
-                window.draw(text10);
+                window.draw(animSprites[frameIndex]);
+                for (const auto &l: Text) {
+                    window.draw(l);
+                }
                 window.display();
             }
             //newFlight=false;
@@ -409,7 +451,8 @@ double angle(float airport1X, float airport1Y, float airport2X, float airport2Y)
     }
 }
 
-void init_text(sf::Font &font1, sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4, sf::Text &text5,
+void init_text(sf::Font &font1, sf::Font &font2, sf::Text &text1, sf::Text &text2, sf::Text &text3, sf::Text &text4,
+               sf::Text &text5,
                sf::Text &text6, sf::Text &text7, sf::Text &text8, sf::Text &text9, sf::Text &text10) {
     //Info plane (Coté gauche)
 
@@ -470,7 +513,7 @@ void init_text(sf::Font &font1, sf::Font &font2, sf::Text &text1, sf::Text &text
     text9.setColor(sf::Color::Yellow);
     text9.setPosition(RIGHT_X + 20, 134);
 
-    //Escale
+    //ID
     text10.setFont(font1);
     text10.setCharacterSize(7);
 
@@ -490,6 +533,74 @@ draw_text(sf::RenderWindow &window, sf::Text &text1, sf::Text &text2, sf::Text &
     window.draw(text8);
     window.draw(text9);
 }
+
+void alea_intemp(sf::RenderWindow &window, const double &airport1_x_center, const double &airport1_y_center,
+                 const double &airport2_x_center, const double &airport2_y_center, int number,
+                 std::vector<sf::Sprite> &animSprites, sf::Texture &animTexture) {
+    //sf::VideoMode vm(500, 500);
+
+    sf::Vector2i spriteSize(30, 30);
+
+    sf::Vector2f pos;
+    int sheetRow = (int) animTexture.getSize().y / spriteSize.y;
+    int sheetColumn = (int) animTexture.getSize().x / spriteSize.x;
+    number = 2;
+
+        if (number <= 10 && number >= 2) {
+            pos = sf::Vector2f((float) (airport1_x_center + airport2_x_center) / (float) number,
+                               (float) (airport1_y_center + airport2_y_center) / (float) number);
+
+    }
+        for (int i = 0; i < sheetRow; i++) {
+            for (int j = 0; j < sheetColumn; j++) {
+                animSprites.emplace_back(animTexture,
+                                         sf::IntRect(spriteSize.x * j, spriteSize.y * i, spriteSize.x, spriteSize.y));
+            }
+        }
+
+        for (int i = sheetRow - 1; i >= 0; i--) {
+            for (int j = sheetColumn - 1; j >= 0; j--) {
+                animSprites.emplace_back(animTexture,
+                                         sf::IntRect(spriteSize.x * j, spriteSize.y * i, spriteSize.x, spriteSize.y));
+            }
+        }
+
+        for (auto &animSprite: animSprites) {
+            sf::FloatRect animSpriteRect = animSprite.getLocalBounds();
+            animSprite.setOrigin(animSpriteRect.width / 2.0f, animSpriteRect.height / 2.0f);
+            animSprite.setPosition((float) pos.x, (float) pos.y);
+        }
+    }
+
+
+void Aiport_network::manage_pertubation(sf::RenderWindow &window, int &num, int &number, int &number_of_pertubation,
+                                        std::vector<int> &num_connect, std::vector<sf::Sprite> &animSprites,
+                                        sf::Texture &animTexture, std::vector<std::vector<sf::Sprite>> &vec_Sprites) {
+    bool find(false);
+    number_of_pertubation = rand() % 7 + 1;
+    for (int zz(0); zz < number_of_pertubation; zz++) {
+        do{
+            num = rand() % m_connect.size();
+            for(int p : num_connect){
+                if(num==p){
+                    find=true;
+                }
+            }
+        } while (find);
+        find = false;
+        num_connect.push_back(num);
+
+        alea_intemp(window, m_connect[num]->getPremier()->getXcentre(), m_connect[num]->getPremier()->getYcentre(),
+                    m_connect[num]->getDeuxieme()->getXcentre(), m_connect[num]->getDeuxieme()->getYcentre(), number,
+                    animSprites, animTexture);
+        vec_Sprites.emplace_back();
+        vec_Sprites[zz] = animSprites;
+        /*do {
+            number = rand() % 10 + 2;
+        } while (!(number <= 10 && number >= 2));*/ //Position du sprite
+    }
+}
+
 
 //VERIFICATION DE LA VIABILITE DE L'AEROPORT QUI SE TROUVE A UNE DISTANCE MINIMALE
 /*   if (s == f->get_arrival()->getId()) {

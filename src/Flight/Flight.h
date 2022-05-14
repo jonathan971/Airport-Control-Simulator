@@ -17,7 +17,7 @@ private:
     std::vector<Airplane *> m_list_of_plane;
     std::vector<Airport *> m_list_of_airport;
 public:
-    Flight(std::vector<Airplane *> list_of_plane,std::vector<Airport *> list_of_airport, bool &enter_manual);
+    Flight(std::vector<Airplane *> list_of_plane,std::vector<Airport *> list_of_airport, bool &enter_manual, std::vector<Flight *> &ALl_Flight);
 
     Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> list_of_airport, std::vector<Flight *> &oldF);
 

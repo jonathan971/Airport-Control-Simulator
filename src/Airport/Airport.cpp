@@ -210,6 +210,7 @@ bool Airport::condition_takeoff() {
 void show_airport_on_screen(sf::Event event, sf::RenderWindow &window, sf::Sprite &Sprite, Aiport_network &a, sf::Font &font,
                             sf::Font &font2, std::vector<Flight *> &ALl_flight, bool &enter_manual, Plane &p) {
     bool ok(false);
+    bool fin(false);
 
     sf::Texture Sydney;
     sf::Texture Pekin;
@@ -326,24 +327,24 @@ void show_airport_on_screen(sf::Event event, sf::RenderWindow &window, sf::Sprit
     window.draw(Sprite);
     window.display();
 
-    while (window.isOpen()) {
+    do {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::I) {
                     window.clear();
                     window.draw(Sprite);
                     a.show_network_airport_line_on_screen(event, window, Sprite, font);
-                    ok=true;
+                    ok = true;
                 }
                 if (event.key.code == sf::Keyboard::O) {
                     window.clear();
                     window.draw(Sprite);
-                    ok=false;
+                    ok = false;
                 }
             } else {
                 window.clear();
                 window.draw(Sprite);
-                if(ok){
+                if (ok) {
                     a.show_network_airport_line_on_screen(event, window, Sprite, font);
                     //Plane_Movement(window, Sprite, enter_manual, ALl_flight,  p,  a);
                 }
@@ -358,59 +359,59 @@ void show_airport_on_screen(sf::Event event, sf::RenderWindow &window, sf::Sprit
                     if (i == 0) {
                         window.draw(Sprite_Sydney);
                         window.draw(Sprite_Sydney_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
 
                     } else if (i == 1) {
                         window.draw(Sprite_Pekin);
                         window.draw(Sprite_Pekin_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 2) {
                         window.draw(Sprite_Moscou);
                         window.draw(Sprite_Moscou_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 3) {
                         window.draw(Sprite_Dubai);
                         window.draw(Sprite_Dubai_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 4) {
                         window.draw(Sprite_Londres);
                         window.draw(Sprite_Londres_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 5) {
                         window.draw(Sprite_Pretoria);
                         window.draw(Sprite_Pretoria_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 6) {
                         window.draw(Sprite_Algeria);
                         window.draw(Sprite_Algeria_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 7) {
                         window.draw(Sprite_Los_Angeles);
                         window.draw(Sprite_Los_Angeles_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 8) {
                         window.draw(Sprite_New_York);
                         window.draw(Sprite_New_York_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 9) {
                         window.draw(Sprite_Rio_De_Janeiro);
                         window.draw(Sprite_Rio_De_Janeiro_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     } else if (i == 10) {
                         window.draw(Sprite_Martinique);
                         window.draw(Sprite_Martinique_info_airport);
-                        myString+=std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
-                        myString2+=std::to_string(a.getListAirport()[i]->getGround_seats_free());
+                        myString += std::to_string(a.getListAirport()[i]->getGround_seats_occuped());
+                        myString2 += std::to_string(a.getListAirport()[i]->getGround_seats_free());
                     }
                 }
             }
@@ -421,9 +422,13 @@ void show_airport_on_screen(sf::Event event, sf::RenderWindow &window, sf::Sprit
             window.display();
             myString.clear();
             myString2.clear();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::A) {
+                    fin = true;
+                }
+            }
         }
-    }
-
+    }while(!fin);
 }
 
 
