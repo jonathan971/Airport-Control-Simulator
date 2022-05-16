@@ -50,6 +50,8 @@ public:
     void Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, bool &enter_manual, std::vector<Flight *> &ALl_flight,
                    Plane p, Aiport_network a, sf::Font &font2, sf::Font &font1);
 
+
+
 };
 
 sf::Vector2f (Interpolate(const sf::Vector2f (&pointA), const sf::Vector2f (&pointB), float factor));

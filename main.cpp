@@ -38,13 +38,14 @@ int main() {
 
         switch (choix) {
             case 1 :
-                m.modelize_map();
+                m.modelize_map(a);
 
 
 
 
 
-              /*  Sprite.setScale(
+
+                /*Sprite.setScale(
                         targetSize.x / Sprite.getLocalBounds().width,
                         targetSize.y / Sprite.getLocalBounds().height);
 
@@ -65,7 +66,8 @@ int main() {
                         }
                     }
                 }*/
-                fin = false;
+                choix = 0;
+                //fin = false;
 
                 break;
             case 2 :

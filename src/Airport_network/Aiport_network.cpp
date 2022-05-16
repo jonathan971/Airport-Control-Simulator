@@ -168,6 +168,8 @@ void Aiport_network::init_flight(std::vector<Flight *> &ALl_flight, size_t i, sf
         Airport2.x = (float) m_airport[flight_plan[i][j + 1]]->getXcentre();
         Airport2.y = (float) m_airport[flight_plan[i][j + 1]]->getYcentre();
 
+
+
     }
 
 }
@@ -179,7 +181,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     window.setFramerateLimit(60);
 
     sf::Texture Airplane_info;
-    Airplane_info.loadFromFile("../Graphic_Content/Map/Info/F.png");
+    Airplane_info.loadFromFile("Graphic_Content/Map/Info/F.png");
     sf::Sprite Sprite_Airplane_info(Airplane_info);
     Sprite_Airplane_info.setPosition(29, 23);
     sf::Text text1, text2, text3, text4, text5, text6, text7, text8, text9, text10;

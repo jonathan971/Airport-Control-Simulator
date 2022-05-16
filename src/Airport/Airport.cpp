@@ -21,7 +21,6 @@ Airport::Airport(int &id, std::string &AirportName, int &Xmin, int &Xmax, int &X
     m_management_Ground_seats[2] = false;
     m_management_Ground_seats[3] = false;
 
-
 }
 
 void Airport::addSuccesseur(Airport *successeur, int poids) {
@@ -80,7 +79,7 @@ const std::vector<std::pair<Airport *const, int>> &Airport::getSuccesseurs() con
 void Airport::management_Landing(Airplane *airplane_which_landing) {
     for (size_t i(0); i < m_management_nbrRunways.size(); ++i) {
         if (!m_management_nbrRunways[i] && m_acces_runway_time < m_anticollision_time) {
-            m_management_nbrRunways[i] = true;
+            m_management_nbrRunways[i] = true;//la piste reste à true pendant 2 secondes, le temps du décollage
 
             m_management_Ground_seats[i] = false;
             airplane_which_landing->put_state(true);
@@ -96,12 +95,12 @@ void Airport::management_takeoff(Airplane *airplane_which_takeoff) {
     for (size_t i(0); i < m_management_nbrRunways.size(); ++i) {
         if (!m_management_nbrRunways[i] &&
             /*!m_management_Ground_seats[i]*/  m_acces_runway_time < m_anticollision_time) {
-            m_management_nbrRunways[i] = true; //pendant 2ut
+            m_management_nbrRunways[i] = true; //la piste reste à true pendant 2 secondes, le temps de l'attérissage
             airplane_which_takeoff->takeoff_or_not(true);
 
             m_management_Ground_seats[i] = true;
             airplane_which_takeoff->put_state(
-                    false);// plus en vol mais ce sera apres 2ut faudra reflechir a ca pareil pr ground seats pariel pour decollage
+                    false);
         } else {
             m_waiting_airplane.push_back(airplane_which_takeoff);
         }
@@ -143,6 +142,7 @@ void Airport::loop_management() {
         for (size_t i(0); i < m_waiting_airplane.size(); ++i) {
             if (m_waiting_airplane[i]->get_if_takeoff()) {
                 management_takeoff(m_waiting_airplane[i]);
+
                 m_waiting_airplane[(int) m_waiting_airplane.size()] = a_transition;
                 m_waiting_airplane[(int) m_waiting_airplane.size()] = m_waiting_airplane[i];
                 m_waiting_airplane[i] = a_transition;
@@ -192,7 +192,7 @@ bool Airport::condition_takeoff() {
     for (size_t i(0); i < m_management_Ground_seats.size(); ++i) {
         if (m_acces_runway_time < m_anticollision_time && !m_management_Ground_seats[i]) {
             groundseats_available++;
-        } else {}
+        }
     }
 
 

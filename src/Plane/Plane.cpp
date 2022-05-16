@@ -46,9 +46,9 @@ Plane::Plane(std::string FichierPlane) {
             Boeing=new sf::Texture;
             Airbus=new sf::Texture;
 
-            ATR->loadFromFile("../Graphic_Content/Planes/ATR.png");
-            Boeing->loadFromFile("../Graphic_Content/Planes/Boeing.png");
-            Airbus->loadFromFile("../Graphic_Content/Planes/Airbus.png");
+            ATR->loadFromFile("Graphic_Content/Planes/ATR.png");
+            Boeing->loadFromFile("Graphic_Content/Planes/Boeing.png");
+            Airbus->loadFromFile("Graphic_Content/Planes/Airbus.png");
 
             if (nmodel == "ATR72-600") {
                 sf::Sprite Sprite_ATR(*ATR);

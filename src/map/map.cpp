@@ -8,60 +8,118 @@
 
 
 Map::Map() {
-    my_map  = new Case *[COLUMNS]();
+    /*my_map  = new Case [COLUMNS]();
 
     for (int i = 0; i < COLUMNS; i++) {
         my_map[i]= new Case[ROWS];
-    }
+    }*/
 }
 
-void Map::modelize_map()  {
-    int case_pixel(0);
+void Map::modelize_map(Aiport_network &a)  {
+
     int id_auto_increment(0);
-    for (int j(0); j < COLUMNS; ++j) {
-        for (int i(0); i < ROWS; ++i) {
+    int rien(0);
+    std::string nom;
+    for (int i(0); i < COLUMNS; ++i) {
+        my_map.emplace_back(std::vector<Case>());
+        for (int j(0); j < ROWS; ++j) {
+           if(i==0){
+               my_map[0].push_back(Case( id_auto_increment, 0.0f));
 
+               if(j==0) {
+                   my_map[0][my_map[0].size() - 1].set_Y(0.0f);
+               }else{
+                   my_map[0][j].set_Y(my_map[0][j - 1].get_Y() + 15.0f);
+               }
+           }else {
+               if(j!=0) {
+                   my_map[i].push_back(Case( id_auto_increment, my_map[i - 1][j].get_X()+15.0f));
+                   my_map[i][j].set_Y(my_map[i][j - 1].get_Y() + 15.0f);
+               }else{
+                   my_map[i].push_back(Case( id_auto_increment, my_map[i-1][j].get_X()+15.0f));
+               my_map[i][j].set_X(my_map[i-1][j].get_X() + 15.0f);
+                   }
+           }
+            ++id_auto_increment;
 
-           /* for(size_t k(0); k < a.getListAirport().size();++k ) {
+            for(size_t k(0); k < a.getListAirport().size();++k ) {
 
-                if (case_pixel >= a.getListAirport()[k]->getXmin() &&
-                    case_pixel <= a.getListAirport()[k]->getXmax() &&
-                    case_pixel >= a.getListAirport()[k]->getYmin() &&
-                    case_pixel <= a.getListAirport()[k]->getYmax()){
+                if ((int)my_map[i][j].get_X() >= a.getListAirport()[k]->getXmin() &&
+                        (int) my_map[i][j].get_X() <= a.getListAirport()[k]->getXmax() &&
+                        (int)my_map[i][j].get_Y() >= a.getListAirport()[k]->getYmin() &&
+                        (int)my_map[i][j].get_Y() <= a.getListAirport()[k]->getYmax()){
 
                     my_map[i][j].set_state(2);
+
                 }
-                else if(case_pixel >= coordsTurbulence &&
+                /*else if(case_pixel >= coordsTurbulence &&
                         case_pixel <= coordsTurbulence &&
                         case_pixel >= coordsTurbulence &&
-                        case_pixel <= coordsTurbulence){my_map[i][j].set_state(3);}
-                else{my_map[i][j].set_state(1);}
-            }*/
+                        case_pixel <= coordsTurbulence){my_map[i][j].set_state(3);}*/
+                //else{my_map[i][j].set_state(1);}
+            }
+            if(my_map[i][j].get_state() == 2){
+                ++rien;
 
-            my_map[i][j].set_X((float)case_pixel);
-            //my_map[i][j].set_Y((float)case_pixel);
-            my_map[i][j].set_id(id_auto_increment);
-            ++id_auto_increment;
-            case_pixel += 15;
-            /*if(my_map[i][j].get_state() == 2) {
-                std::cout << my_map[i][j].get_state() << "\n";
-            }*/
+                //std::cout << "couilles\n";
+                //std::cout << i << "/" << j << "\n";
+
+            }
         }
     }
-    for (int j(0); j < COLUMNS; j++) {
-        for (int i(0); i < ROWS; ++i) {
 
 
-            my_map[i][j].addSuccesseur(&my_map[i-1][j], calcul_distance(my_map[i][j].get_X(),my_map[i][j].get_Y(),my_map[i-1][j].get_X(),my_map[i-1][j].get_Y()));
-            my_map[i][j].addSuccesseur(&my_map[i][j-1], calcul_distance(my_map[i][j].get_X(),my_map[i][j].get_Y(),my_map[i][j-1].get_X(),my_map[i][j-1].get_Y()));
-            my_map[i][j].addSuccesseur(&my_map[i-1][j-1], calcul_distance(my_map[i][j].get_X(),my_map[i][j].get_Y(),my_map[i-1][j-1].get_X(),my_map[i-1][j-1].get_Y()));
+    for (int i(0); i < COLUMNS; ++i) {
+        for (int j(0); j < ROWS; ++j) {
 
-            my_map[i][j].addSuccesseur(&my_map[i+1][j], calcul_distance(my_map[i][j].get_X(),my_map[i][j].get_Y(),my_map[i+1][j].get_X(),my_map[i+1][j].get_Y()));
-            my_map[i][j].addSuccesseur(&my_map[i][j+1], calcul_distance(my_map[i][j].get_X(),my_map[i][j].get_Y(),my_map[i][j+1].get_X(),my_map[i][j+1].get_Y()));
-            my_map[i][j].addSuccesseur(&my_map[i+1][j+1], calcul_distance(my_map[i][j].get_X(),my_map[i][j].get_Y(),my_map[i+1][j+1].get_X(),my_map[i+1][j+1].get_Y()));
+             if(i > 0) {
+                my_map[i][j].addSuccesseur(&my_map[i - 1][j],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i - 1][j].get_X(), my_map[i - 1][j].get_Y()));
+            }
+            if(j>0) {
+                my_map[i][j].addSuccesseur(&my_map[i][j - 1],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i][j - 1].get_X(), my_map[i][j - 1].get_Y()));
+            }
+
+            if(j>0 && i > 0) {
+                my_map[i][j].addSuccesseur(&my_map[i - 1][j - 1],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i - 1][j - 1].get_X(), my_map[i - 1][j - 1].get_Y()));
+            }
+
+            if(j<ROWS) {
+                my_map[i][j].addSuccesseur(&my_map[i][j + 1],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i][j + 1].get_X(), my_map[i][j + 1].get_Y()));
+            }
 
 
+            if(i>0 && j<ROWS ){
+                my_map[i][j].addSuccesseur(&my_map[i - 1][j + 1],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i - 1][j + 1].get_X(), my_map[i - 1][j + 1].get_Y()));
 
+            }
+           if(i<COLUMNS-1) {
+
+               my_map[i][j].addSuccesseur(&my_map[i+1][j],
+                                          calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                          my_map[i+1][j].get_X(), my_map[i+1][j].get_Y()));
+           }
+           if(i<COLUMNS-1 && j<ROWS ) {
+                my_map[i][j].addSuccesseur(&my_map[i + 1][j + 1],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i + 1][j + 1].get_X(), my_map[i + 1][j + 1].get_Y()));
+           }
+
+
+           if(j>0 && i<COLUMNS-1){
+                my_map[i][j].addSuccesseur(&my_map[i + 1][j - 1],
+                                           calcul_distance(my_map[i][j].get_X(), my_map[i][j].get_Y(),
+                                                           my_map[i + 1][j - 1].get_X(), my_map[i + 1][j - 1].get_Y()));
+           }
 
         }
     }
@@ -70,38 +128,47 @@ void Map::modelize_map()  {
 
 
 
-std::vector<Case*> Map::Astar_turbulence(Airplane* plane, Case* arrival ) {
+
+void Map::Astar_turbulence(Airplane* plane, Case* arrival ) {
+
+    std::vector<Case> open_list;
+    std::vector<Case> closed_list;
 
 
-    std::vector<int> couleurs(200, 0);
-    std::vector<float> distances(200, std::numeric_limits<float>::max());// 200 pour le nbre de case quon pense utilisé pour la redirection
-    std::vector<int> heuristiques(200, std::numeric_limits<int>::max());// 200 pour le nbre de case quon pense utilisé pour la redirection
-    std::vector<int> predecesseurs;
-    std::vector<Case*> deviation;
+
+    std::vector<int> couleurs(my_map.size(), 0);
+    std::vector<float> distances(my_map.size(), std::numeric_limits<float>::max());// 200 pour le nbre de case quon pense utilisé pour la redirection
+    std::vector<float> heuristiques(my_map.size(), std::numeric_limits<float>::max());// 200 pour le nbre de case quon pense utilisé pour la redirection
+    std::vector<Case*> predecesseurs;
+    //std::vector<Case*> deviation;
     bool arrive;
-    //Case* depart;
 
 
 
-    Case* s;
+    Case* avion_case;//case ou il y a l'avion
+    for (int i(0); i < COLUMNS; ++i) {
+        for (int j(0); j < ROWS; ++j) {
+
+            if (my_map[i][j].get_X() + 15.0f >= plane->get_plane_x() &&
+                my_map[i][j].get_X() <= plane->get_plane_x() &&
+                my_map[i][j].get_Y() + 15.0f >= plane->get_plane_y() &&
+                my_map[i][j].get_Y() <= plane->get_plane_y()){
+
+                avion_case = &my_map[i][j];
+            }
+        }
+    }
 
     do {
 
         float distanceMini = std::numeric_limits<float>::max();
         bool choix(false);
         do {
-            for (int j(0); j < COLUMNS; j++) {
-                for (int i(0); i < ROWS; ++i) {
 
-                    if(my_map[i][j].get_X()==plane->get_plane_x() && my_map[i][j].get_Y()==plane->get_plane_y() ){
-                        s = &my_map[i][j];
-                    }
-                }
-            }
             for (size_t i = 0; i < distances.size(); i++) {
                 if (couleurs[i] == 0 && distances[i] < distanceMini) {
-                    distanceMini = distances[i] + calcul_distance(plane->get_plane_x(),plane->get_plane_y(),s->get_X(),s->get_Y());
-                    s->set_id((int) i) ;
+                    distanceMini = distances[i] + calcul_distance(plane->get_plane_x(),plane->get_plane_y(),avion_case->get_X(),avion_case->get_Y());
+                    avion_case->set_id((int) i) ;
                 }
                 //  rapport_consommation_carburant = f->get_airplane()->get_plane_comsuption() / 300); la on obtient le nbre d'ut que l'on peut faire avec le carburant de l'avion
             }
@@ -109,33 +176,48 @@ std::vector<Case*> Map::Astar_turbulence(Airplane* plane, Case* arrival ) {
 
             //VERIFICATION DE LA VIABILITE DE LA CASE
             if (plane->get_plane_x() == arrival->get_X() &&  plane->get_plane_y() == arrival->get_Y()) {
-                couleurs[s->get_id()] = 1;
+                //couleurs[avion_case->get_id()] = 1;
                 arrive = true;
                 choix=true;
-                deviation.push_back(s);// push back dans le vecteur du chemin
-            } else if (s->get_state()!=3) {// on vérifie si la case n'est pas un obstacle
-                couleurs[s->get_id()] = 1;
+                //deviation.push_back(s);// push back dans le vecteur du chemin
+            } else if (avion_case->get_state()!=3) {// on vérifie si la case n'est pas un obstacle
+                //couleurs[avion_case->get_id()] = 1;
                 choix = true;
-                deviation.push_back(s);// push back dans le vecteur du chemin
+                //deviation.push_back(s);// push back dans le vecteur du chemin
 
             } else {
                 //refaire le calcul de distance mini sans s donc remettre la distance de s à l'infini pour que l'aeroport d'id s ne soit  plus prit en compte
-                distances[s->get_id()] = std::numeric_limits<float>::max();
+                distances[avion_case->get_id()] = std::numeric_limits<float>::max();
             }
         } while (!choix);
 
-        /*couleurs[s] = 1;
-        nbMarques++;*/
+        //recup position de la case choisi
 
-        for (auto successeur: s->getSuccesseurs()) {
+
+
+
+
+
+
+
+
+
+        for (auto successeur: avion_case->getSuccesseurs()) {
+            //tchek si succsseur dans la closed list
+            //stocke la distance wsv la distance du precdent + la nouvelle
+            //gerer lheuristique qui est la distance de la pos ou on est jusqua larrivé en vol doiseau
+            //et on fait la resultante des 2 pour choisir le prochain sommet
+            //on stocke le pred
             if (couleurs[successeur.first->get_id()] == 0) {
-                if (distances[s->get_id()] + successeur.second < distances[successeur.first->get_id()]) {
-                   distances[successeur.first->get_id()] = distances[s->get_id()] + successeur.second +
-                            calcul_distance(plane->get_plane_x(),plane->get_plane_y(),s->get_X(),s->get_Y());
-                    predecesseurs[successeur.first->get_id()] = s->get_id();
+                if (distances[avion_case->get_id()] + successeur.second < distances[successeur.first->get_id()]) {
+                   distances[successeur.first->get_id()] = distances[avion_case->get_id()] + successeur.second +
+                            calcul_distance(plane->get_plane_x(),plane->get_plane_y(),avion_case->get_X(),avion_case->get_Y());
+                    predecesseurs[successeur.first->get_id()] = avion_case;
                 }
             }
         }
+
+
     } while (arrive);
 
 
@@ -143,7 +225,22 @@ std::vector<Case*> Map::Astar_turbulence(Airplane* plane, Case* arrival ) {
 
 
 
-    return deviation;
+    //return deviation;
+}
+
+bool Map::already_in_list(Case s, std::vector<Case> list) {
+    int already;
+
+    for(size_t i(0); i<list.size(); ++i){
+        if(s.get_id() == list[i].get_id()){
+            ++already;
+        }
+    }
+    if(already>0){
+        return true;
+    }
+    else{ return false;}
+
 }
 
 

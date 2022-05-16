@@ -359,6 +359,7 @@ int Flight::get_arrival_num() const {
     return num;
 }
 
+
 std::vector<int> Flight::PCC() {
 
     // INITIALISATION
@@ -427,3 +428,5 @@ std::vector<int> Flight::PCC() {
     chemin_suivi.erase(chemin_suivi.begin());
     return chemin_suivi;
 }
+
+

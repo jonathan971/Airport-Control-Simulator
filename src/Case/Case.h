@@ -14,13 +14,14 @@
 class Case {
 private :
     int m_state,  m_id;
-    float m_x, m_y;
     std::vector<std::pair<Case *const, float>> m_successeurs;
 
-    //std::pair<float, float> m_pos;//x,y
+    std::pair<float, float> m_pos;//x,y
 
 public :
-    Case();
+    Case( int id, float x);
+
+    ~Case();
 
     void set_X(float x);
 

@@ -4,30 +4,29 @@
 
 #include "Case.h"
 
-Case::Case()  {
-    //m_y = 0.0f;
-   // m_pos.first = 0.0f;
-    //m_pos.second = 0.0f;
+Case::Case( int id, float x) : m_state{0}, m_id{id} {
+    m_pos.first = x;
 }
+
 
 void Case::set_id(int id) {
     m_id = id;
 }
 
 void Case::set_X(float x) {
-    //m_pos.first = x;
-    m_x = x;
+    m_pos.first = x;
+
 }
 
-/*void Case::set_Y(float y) {
-    //m_pos.second = y;
-    m_y = y;
-}*/
+void Case::set_Y(float y) {
+    m_pos.second = y;
+
+}
 
 void Case::set_state(int state) {
 
     m_state = state;
-    //description state ; 1->...., 2->Airport, 3->turbulence,
+    //description state ; 0->nothing, 2->Airport, 3->turbulence, 4-> OPEN LIST, 5-> CLOSED LIST
 
 }
 
@@ -36,14 +35,14 @@ int Case::get_state() const {
 }
 
 float Case::get_X() const {
-    //return m_pos.first;
-    return m_x;
+    return m_pos.first;
+    //return x;
 }
 
 float Case::get_Y() const {
 
-   // return m_pos.second;
-   return m_y;
+    return m_pos.second;
+  // return y;
 }
 
 int Case::get_id() const {
@@ -64,6 +63,11 @@ void Case::afficher() const {
         std::cout << "      " << m_id << "---" << "(" << addrSommet.second << ")" << "--->" << addrSommet.first->get_id()
                   << std::endl;
     }
+}
+
+Case::~Case() {
+    //std::cout << "Destruction du sommet " << m_id << "." << std::endl;
+
 }
 
 
