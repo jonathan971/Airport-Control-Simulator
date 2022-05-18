@@ -21,13 +21,10 @@ class Airport {
 private:
     int m_id, m_Xmin, m_Xmax, m_Xcentre, m_Ymin, m_Ymax, m_Ycentre;
     std::string m_AirportName;
-    //bool landing_viability;
-    //bool takeoff_viability;
     int m_NbrRunways, m_Ground_seats;
     double m_Ground_waiting_time, m_acces_runway_time, m_anticollision_time, m_landing_time, m_takeoff_time, m_in_flight_loop;
     std::vector<bool> m_management_nbrRunways;
     std::vector<bool> m_management_Ground_seats;
-
     std::vector<Airplane *> m_waiting_airplane;
     std::vector<std::pair<Airport *const, int>> m_successeurs;
 

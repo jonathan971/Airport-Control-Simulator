@@ -8,14 +8,14 @@ int main() {
     float time(0.0f);
     sf::Font font;
     sf::Font font2;
-    font.loadFromFile("../Font/Pixeled.ttf");
-    font2.loadFromFile("../Font/calendar note tfb.ttf");
+    font.loadFromFile("Font/Pixeled.ttf");
+    font2.loadFromFile("Font/calendar note tfb.ttf");
     //Initialisation Menu
     sf::Texture Menu;
-    Menu.loadFromFile("../Graphic_Content/Menu/cover.png");
+    Menu.loadFromFile("Graphic_Content/Menu/cover.png");
     sf::Sprite Sprite_Menu(Menu);
     sf::Texture Rect1, Rect2;
-    Rect1.loadFromFile("../Graphic_Content/Menu/Rectangle.png");
+    Rect1.loadFromFile("Graphic_Content/Menu/Rectangle.png");
     sf::Sprite Sprite_Rect1(Rect1);
     Sprite_Rect1.setPosition(20, 560);
     sf::Sprite Sprite_Rect2(Rect1);

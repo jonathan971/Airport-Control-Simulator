@@ -6,7 +6,6 @@
 #define CONTROLEAERIEN_GROUPE_1_B_CASE_H
 
 #include <iostream>
-//#include <SFML/Graphics.hpp>
 #include <vector>
 
 
@@ -15,7 +14,6 @@ class Case {
 private :
     int m_state,  m_id;
     std::vector<std::pair<Case *const, float>> m_successeurs;
-
     std::pair<float, float> m_pos;//x,y
 
 public :

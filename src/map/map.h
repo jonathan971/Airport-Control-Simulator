@@ -11,6 +11,8 @@
 
 #define COLUMNS 88
 #define ROWS 48
+#define SIZE 48*88
+
 class Airplane;
 class Case;
 class Aiport_network;
@@ -25,9 +27,7 @@ public:
     Map();
 
     void modelize_map(Aiport_network &a);
-    static bool already_in_list(Case s,std::vector<Case> list);
-
-    void Astar_turbulence (Airplane* plane, Case* arrival);
+    std::vector<Case*> Astar_turbulence (Airplane* plane, Case* arrival);
 
 
 };

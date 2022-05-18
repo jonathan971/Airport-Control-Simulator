@@ -27,6 +27,7 @@ class Aiport_network {
 private:
     std::vector<Airport *> m_airport;
     std::vector<Connexion *> m_connect;
+    sf::Vector2f pos_turbulence;
 public:
     Aiport_network(std::string FichieraiportNetwork);
 
@@ -43,6 +44,12 @@ public:
                    const double &airport2_x_center, const double &airport2_y_center, sf::Font &font, int i);
 
     void addVol(int &num1, int &num2, int &poids);
+
+    void set_pos_turbulence(sf::Vector2f pos);
+
+    float get_x_turbulence();
+
+    float get_y_turbulence();
 
     void init_flight(std::vector<Flight *> &ALl_flight, size_t i, sf::Vector2f &(Airport1),
                      sf::Vector2f &(Airport2), std::vector<std::vector<int>> &flight_plan, int &j,
@@ -68,5 +75,5 @@ void draw_text(sf::RenderWindow &window, sf::Text &text1, sf::Text &text2, sf::T
           sf::Text &text6, sf::Text &text7, sf::Text &text8, sf::Text &text9);
 
 void alea_intemp(sf::RenderWindow &window, const double &airport1_x_center, const double &airport1_y_center,
-                 const double &airport2_x_center, const double &airport2_y_center, int number,  std::vector<sf::Sprite> &animSprites, sf::Texture &animTexture);
+                 const double &airport2_x_center, const double &airport2_y_center, int number,  std::vector<sf::Sprite> &animSprites, sf::Texture &animTexture;
 #endif //CONTROLEAERIEN_GROUPE_1_B_AIPORT_NETWORK_H

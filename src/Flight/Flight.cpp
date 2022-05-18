@@ -400,6 +400,7 @@ std::vector<int> Flight::PCC() {
     double rapport_consommation_carburant(0);// si on définit par exemple 300L/ut
     std::vector<int> chemin_suivi;
     chemin_suivi.push_back(get_departure_num());
+    //combiné rapport consommation et distance
 
     do {
         int s = 0;
