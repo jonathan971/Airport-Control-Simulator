@@ -196,6 +196,7 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
     std::vector<int> num_connect;
     std::vector<Flight *> oldF;
     std::vector<std::vector<sf::Sprite>> vec_Sprites;
+    num = rand() % m_connect.size();
     sf::Event event{};
 
 
@@ -279,9 +280,10 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
 
             boucle = clock4.getElapsedTime().asSeconds();
             if(boucle>TIME_MAX_TO_CREATE_PERTUBATION) {
-                manage_pertubation(window, num, number, number_of_pertubation,
-                                   num_connect, animSprites,
-                                   animTexture, vec_Sprites);
+                num = rand() % m_connect.size();
+                alea_intemp(window, m_connect[num]->getPremier()->getXcentre(), m_connect[num]->getPremier()->getYcentre(),
+                            m_connect[num]->getDeuxieme()->getXcentre(), m_connect[num]->getDeuxieme()->getYcentre(), number,
+                            animSprites, animTexture);
                 clock4.restart();
             }
 
@@ -401,7 +403,6 @@ Aiport_network::Plane_Movement(sf::RenderWindow &window, sf::Sprite &Sprite, boo
                 for (const auto & l : Text) {
                     window.draw(l);
                 }
-
 
                 window.draw(animSprites[frameIndex]);
                 window.display();
@@ -540,7 +541,7 @@ void alea_intemp(sf::RenderWindow &window, const double &airport1_x_center, cons
     //sf::VideoMode vm(500, 500);
 
     sf::Vector2i spriteSize(30, 30);
-
+    int m=0;
     sf::Vector2f pos;
     int sheetRow = (int) animTexture.getSize().y / spriteSize.y;
     int sheetColumn = (int) animTexture.getSize().x / spriteSize.x;
@@ -549,8 +550,8 @@ void alea_intemp(sf::RenderWindow &window, const double &airport1_x_center, cons
         if (number <= 10 && number >= 2) {
             pos = sf::Vector2f((float) (airport1_x_center + airport2_x_center) / (float) number,
                                (float) (airport1_y_center + airport2_y_center) / (float) number);
+        }
 
-    }
         for (int i = 0; i < sheetRow; i++) {
             for (int j = 0; j < sheetColumn; j++) {
                 animSprites.emplace_back(animTexture,
@@ -570,8 +571,7 @@ void alea_intemp(sf::RenderWindow &window, const double &airport1_x_center, cons
             animSprite.setOrigin(animSpriteRect.width / 2.0f, animSpriteRect.height / 2.0f);
             animSprite.setPosition((float) pos.x, (float) pos.y);
         }
-    }
-
+}
 
 void Aiport_network::manage_pertubation(sf::RenderWindow &window, int &num, int &number, int &number_of_pertubation,
                                         std::vector<int> &num_connect, std::vector<sf::Sprite> &animSprites,

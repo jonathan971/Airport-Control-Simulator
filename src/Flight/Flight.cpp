@@ -245,12 +245,14 @@ void Flight::set_departure() {
                         std::cout << "\n"
                                      "ENTER THE AIRPORT OF DEPARTURE OF YOUR CHOICE : ";
                         std::cin >> airport;
-                        for (int j(0); j < airport.size(); j++) {
-                            if (airport != m_list_of_airport[j]->get_AirportName() && j == m_list_of_airport.size()) {
-                                std::cout << "UNKNOWN CHOICE\n"
-                                             "PLEASE RE-TYPE\n";
+                        for (int j(0); j < m_list_of_airport.size(); j++) {
+                            if (airport != m_list_of_airport[j]->get_AirportName()) {
                                 find = false;
-                            } else {
+                                if (j == m_list_of_airport.size() && !find) {
+                                    std::cout << "UNKNOWN CHOICE\n"
+                                                 "PLEASE RE-TYPE\n";
+                                }
+                            }else if(airport == m_list_of_airport[j]->get_AirportName()) {
                                 find = true;
                                 j = (int) m_list_of_airport.size();
                             }
@@ -273,7 +275,7 @@ void Flight::set_departure() {
 void Flight::set_arrival() {
     bool find(false), ok(false);
     unsigned int choice(0);
-    std::string airport;
+    std::string airport2;
 
     do {
         std::cout << "\n";
@@ -317,20 +319,22 @@ void Flight::set_arrival() {
                         }
                         std::cout << "\n"
                                      "ENTER THE AIRPORT OF ARRIVAL OF YOUR CHOICE : ";
-                        std::cin >> airport;
-                        for (int j(0); j < airport.size(); j++) {
-                            if (airport != m_list_of_airport[j]->get_AirportName() && j == m_list_of_airport.size()) {
-                                std::cout << "UNKNOWN CHOICE\n"
-                                             "PLEASE RE-TYPE\n";
+                        std::cin >> airport2;
+                        for (int j(0); j < m_list_of_airport.size(); j++) {
+                            if (airport2 != m_list_of_airport[j]->get_AirportName()) {
                                 find = false;
-                            } else {
+                                if (j == m_list_of_airport.size() && !find) {
+                                    std::cout << "UNKNOWN CHOICE\n"
+                                                 "PLEASE RE-TYPE\n";
+                                }
+                            }else if(airport2 == m_list_of_airport[j]->get_AirportName()) {
                                 find = true;
                                 j = (int) m_list_of_airport.size();
                             }
                         }
                     } while (!find);
                     ok = true;
-                    choice = 0;
+                    //choice = 0;
                     break;
                 default:
                     std::cout << "UNKNOWN CHOICE\n"
@@ -340,7 +344,10 @@ void Flight::set_arrival() {
             }
         }
     } while (!ok);
-    arrival = airport;
+    for (int i = 0; i < 67; ++i) {
+        std::cout << "*";
+    }
+    arrival = airport2 ;
 }
 
 void Flight::Flight_manual() {
