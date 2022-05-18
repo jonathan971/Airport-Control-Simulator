@@ -66,7 +66,6 @@ void Case::afficher() const {
 }
 
 Case::~Case() {
-    //std::cout << "Destruction du sommet " << m_id << "." << std::endl;
 
 }
 

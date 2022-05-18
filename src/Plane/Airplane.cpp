@@ -105,7 +105,4 @@ void Airplane::set_Coord_plane(float plane_x, float plane_y) {
 
 
 
-/*Airplane Airplane::GetPlane(Plane plane) const {
-    return Airplane(__cxx11::basic_string(), <#initializer#>, __cxx11::basic_string(), <#initializer#>, <#initializer#>,
-                    <#initializer#>, <#initializer#>, <#initializer#>, <#initializer#>);
-}*/
+

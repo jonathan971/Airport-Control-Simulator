@@ -27,7 +27,6 @@ class Aiport_network {
 private:
     std::vector<Airport *> m_airport;
     std::vector<Connexion *> m_connect;
-    sf::Vector2f pos_turbulence;
 public:
     Aiport_network(std::string FichieraiportNetwork);
 
@@ -44,12 +43,6 @@ public:
                    const double &airport2_x_center, const double &airport2_y_center, sf::Font &font, int i);
 
     void addVol(int &num1, int &num2, int &poids);
-
-    void set_pos_turbulence(sf::Vector2f pos);
-
-    float get_x_turbulence();
-
-    float get_y_turbulence();
 
     void init_flight(std::vector<Flight *> &ALl_flight, size_t i, sf::Vector2f &(Airport1),
                      sf::Vector2f &(Airport2), std::vector<std::vector<int>> &flight_plan, int &j,

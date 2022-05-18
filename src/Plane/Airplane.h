@@ -70,7 +70,6 @@ public:
     void afficher() const;
 
 
-    //Airplane GetPlane(Plane plane) const;//obligation d'appler la fonction dans le main
 };
 
 #endif //CONTROLEAERIEN_GROUPE_1_B_AIRPLANE_H

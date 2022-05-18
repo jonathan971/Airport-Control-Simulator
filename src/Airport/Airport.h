@@ -40,8 +40,6 @@ public:
 
     void afficher() const;
 
-    //bool get_viability_landing() const;
-    // bool get_viability_takeoff() const;
     int getId() const;
 
     int getXmin() const;

@@ -2,7 +2,7 @@
 
 Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> list_of_airport, bool &enter_manual, std::vector<Flight *> &ALl_Flight)
         : m_list_of_plane{list_of_plane}, m_list_of_airport{list_of_airport}, id_plane{0} {
-//on recup direct les vecteur qu'on aura creer dans le main
+
     std::srand(std::time(nullptr));
     int choice(0), number(0);
     bool ok(false), find(false);
@@ -63,7 +63,7 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
         //Tour suivant automatiques
     else {
         //Random between Airport List for choose a Departure
-        //departure = "Sydney" ;
+
         do {
             choice = rand() % m_list_of_airport.size();
 
@@ -78,7 +78,7 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
 
         //Random between Airport List for choose an Arrival
         ok = false;
-        //arrival = "Martinique";
+
         do {
 
             choice = rand() % m_list_of_airport.size();
@@ -88,8 +88,7 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
                 ok = true;
             } else {
                 ok = false;
-                //copie du vecteur qui sera egale a ma liste d'aeroport²
-                //compteur++;
+
             }
         } while (!ok);
     }
@@ -97,7 +96,7 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
 
 Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> list_of_airport, std::vector<Flight *> &oldF)
         : m_list_of_plane{list_of_plane}, m_list_of_airport{list_of_airport}, id_plane{0} {
-//on recup direct les vecteur qu'on aura creer dans le main
+
     std::srand(std::time(nullptr));
     int choice(0), number(0), num(0);
     bool ok(false), find(false);
@@ -155,7 +154,6 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
     ok = false;
 
     do {
-
         choice = rand() % m_list_of_airport.size();
         if (m_list_of_airport[choice]->get_AirportName() != departure &&
             m_list_of_airport[choice]->condition_takeoff()) {//condition pour l'aterrissage d'un vol
@@ -163,8 +161,6 @@ Flight::Flight(std::vector<Airplane *> list_of_plane, std::vector<Airport *> lis
             ok = true;
         } else {
             ok = false;
-            //copie du vecteur qui sera egale a ma liste d'aeroport²
-            //compteur++;
         }
     } while (!ok);
 }
@@ -396,11 +392,10 @@ std::vector<int> Flight::PCC() {
     std::vector<int> distances(m_list_of_airport.size(), std::numeric_limits<int>::max());
     distances[get_departure_num()] = 0; // departure est à une distance de 0 de lui même.
     std::vector<int> predecesseurs(m_list_of_airport.size(), -1); // nous ne connaissons pas encore les prédécesseurs
-    // predecesseurs[f->get_departure()->getId()] = 0; // on pourrait laisser -1, departure n'a pas vraiment de prédécesseur car il s'agit de l'aeroport initial
-    double rapport_consommation_carburant(0);// si on définit par exemple 300L/ut
+    double rapport_consommation_carburant(0);// si on définit par exemple 300L/km
     std::vector<int> chemin_suivi;
     chemin_suivi.push_back(get_departure_num());
-    //combiné rapport consommation et distance
+
 
     do {
         int s = 0;
@@ -413,26 +408,24 @@ std::vector<int> Flight::PCC() {
                     distanceMini = distances[i];
                     s = (int) i;
                 }
-                //  rapport_consommation_carburant = f->get_airplane()->get_plane_comsuption() / 300); la on obtient le nbre d'ut que l'on peut faire avec le carburant de l'avion
             }
-            //std::cout << std::endl << std::endl;
+            rapport_consommation_carburant = this->get_airplane()->get_plane_comsuption() / 300; //la on obtient le nbre de km que l'on peut faire avec le carburant de l'avion
+
+
 
             //VERIFICATION DE LA VIABILITE DE L'AEROPORT QUI SE TROUVE A UNE DISTANCE MINIMALE
-            if (s == get_arrival_num()  /* rapport_consommation_carburant <=
-                       distances[s]*/) {
+            if (s == get_arrival_num()  && rapport_consommation_carburant <= distances[s]) {
                 couleurs[s] = 1;
                 nbMarques = int(m_list_of_airport.size());
                 choix = true;
                 chemin_suivi.push_back(s);// push back dans le vecteur du chemin
-            } else if (m_list_of_airport[s]->condition_takeoff() && m_list_of_airport[s]->condition_landing()
-                /* rapport_consommation_carburant <=
-                 distances[s]*/) {// on vérifie si le poids (nbre d'ut entre aéroport), est supérieur au nombre d'ut que peut réaliser l'avion
+            } else if (m_list_of_airport[s]->condition_takeoff() && m_list_of_airport[s]->condition_landing() &&
+                 rapport_consommation_carburant <=
+                 distances[s]) {// on vérifie si le poids (nbre d'ut entre aéroport), est supérieur au nombre d'ut que peut réaliser l'avion
                 couleurs[s] = 1;
                 nbMarques++;
                 choix = true;
                 chemin_suivi.push_back(s);// push back dans le vecteur du chemin
-
-                //arrive_a_destination = true;
 
             } else {
                 //refaire le calcul de distance mini sans s donc remettre la distance de s à l'infini pour que l'aeroport d'id s ne soit  plus prit en compte
@@ -440,8 +433,7 @@ std::vector<int> Flight::PCC() {
             }
         } while (!choix);
 
-        /*couleurs[s] = 1;
-        nbMarques++;*/
+
 
         for (auto successeur: m_list_of_airport[s]->getSuccesseurs()) {
             if (couleurs[successeur.first->getId()] == 0) {

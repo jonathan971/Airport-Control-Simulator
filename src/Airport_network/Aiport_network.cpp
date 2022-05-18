@@ -571,7 +571,7 @@ void alea_intemp(sf::RenderWindow &window, const double &airport1_x_center, cons
             animSprite.setOrigin(animSpriteRect.width / 2.0f, animSpriteRect.height / 2.0f);
             animSprite.setPosition((float) pos.x, (float) pos.y);
         }
-        //a.set_pos_turbulence(pos);
+
 }
 
 
@@ -604,15 +604,4 @@ void Aiport_network::manage_pertubation(sf::RenderWindow &window, int &num, int 
 
 }
 
-float Aiport_network::get_y_turbulence() {
-   // return pos;
-}
 
-float Aiport_network::get_x_turbulence() {
-    return 0;
-}
-
-void Aiport_network::set_pos_turbulence(sf::Vector2f pos) {
-    pos_turbulence = pos;
-
-}

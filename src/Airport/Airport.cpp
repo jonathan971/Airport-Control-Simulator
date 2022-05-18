@@ -149,7 +149,6 @@ void Airport::loop_management() {
                 m_waiting_airplane.pop_back();
             }
         }
-        //jsp si on peut simplifier ça en mode tous faire dans une boucle for
         for (size_t i(0); i < m_waiting_airplane.size(); ++i) {
             if (!m_waiting_airplane[i]->get_if_takeoff()) {
                 management_Landing(m_waiting_airplane[i]);
@@ -346,7 +345,6 @@ void show_airport_on_screen(sf::Event event, sf::RenderWindow &window, sf::Sprit
                 window.draw(Sprite);
                 if (ok) {
                     a.show_network_airport_line_on_screen(event, window, Sprite, font);
-                    //Plane_Movement(window, Sprite, enter_manual, ALl_flight,  p,  a);
                 }
             }
 
